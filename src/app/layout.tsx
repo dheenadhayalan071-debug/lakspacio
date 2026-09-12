@@ -29,8 +29,9 @@ export default function RootLayout({
             <Link href="/ai" className="text-sm font-semibold text-slate-400 hover:text-brand-blue transition-colors">AI Engine</Link>
           </div>
           
-          <Link href="/profile" className="hidden md:block text-sm font-bold bg-white/10 text-white px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors border border-white/10">
-            Profile
+          {/* Sign In Button (Visible on all devices) */}
+          <Link href="/register" className="text-sm font-bold bg-white text-black px-5 py-2 rounded-full hover:bg-slate-200 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+            Sign In
           </Link>
         </nav>
         
