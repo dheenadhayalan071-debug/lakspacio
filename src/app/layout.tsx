@@ -14,6 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-brand-black text-white selection:bg-brand-yellow selection:text-black min-h-screen flex flex-col pb-16 md:pb-0">
+        
         {/* Global Top Navigation */}
         <nav className="flex items-center justify-between p-4 md:p-6 border-b border-gray-900 sticky top-0 bg-brand-black/90 backdrop-blur-md z-50">
           <Link href="/" className="text-2xl font-black tracking-tighter hover:text-brand-yellow transition-colors">
@@ -25,6 +26,7 @@ export default function RootLayout({
             <Link href="/search" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">Find Space</Link>
             <Link href="/facility" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">Facility Hub</Link>
             <Link href="/admin" className="text-sm font-semibold text-gray-400 hover:text-brand-red transition-colors">Intelligence</Link>
+            <Link href="/ai" className="text-sm font-semibold text-gray-400 hover:text-brand-yellow transition-colors">AI Engine</Link>
           </div>
           
           <button className="text-sm font-bold bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200 transition-colors">
@@ -51,9 +53,12 @@ export default function RootLayout({
             <span className="text-lg">🧠</span>
             <span>Intelligence</span>
           </Link>
+          <Link href="/ai" className="text-[10px] font-bold text-gray-400 hover:text-brand-yellow flex flex-col items-center gap-1">
+            <span className="text-lg">✨</span>
+            <span>AI Match</span>
+          </Link>
         </div>
       </body>
     </html>
   );
 }
-
