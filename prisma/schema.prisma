@@ -1,0 +1,89 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  ATHLETE
+  FACILITY_OWNER
+  LAND_OWNER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  fullName      String
+  phone         String?
+  role          Role           @default(ATHLETE)
+  facilities    Facility[]     @relation("OwnerFacilities")
+  bookings      Booking[]
+  demandEvents  DemandEvent[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Facility {
+  id          String         @id @default(cuid())
+  name        String
+  description String?
+  address     String
+  city        String         @default("Madurai")
+  latitude    Float?
+  longitude   Float?
+  ownerId     String
+  owner       User           @relation("OwnerFacilities", fields: [ownerId], references: [id], onDelete: Cascade)
+  courts      Court[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model Court {
+  id          String         @id @default(cuid())
+  facilityId  String
+  facility    Facility       @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  sport       String         // e.g., "Basketball", "Badminton"
+  surface     String?        // e.g., "Synthetic Wood", "Clay"
+  isIndoor    Boolean        @default(false)
+  hourlyRate  Float
+  bookings    Booking[]
+  createdAt   DateTime       @default(now())
+}
+
+model Booking {
+  id          String         @id @default(cuid())
+  userId      String
+  user        User           @relation(fields: [userId], references: [id])
+  courtId     String
+  court       Court          @relation(fields: [courtId], references: [id])
+  startTime   DateTime
+  endTime     DateTime
+  totalPrice  Float
+  status      BookingStatus  @default(PENDING)
+  createdAt   DateTime       @default(now())
+}
+
+model DemandEvent {
+  id            String         @id @default(cuid())
+  userId        String?
+  user          User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  sport         String
+  city          String         @default("Madurai")
+  desiredTime   DateTime?
+  maxBudget     Float?
+  matched       Boolean        @default(false)
+  failureReason String?        // "NO_FACILITY", "PRICE_MISMATCH", "UNAVAILABLE_SLOT"
+  createdAt     DateTime       @default(now())
+}
