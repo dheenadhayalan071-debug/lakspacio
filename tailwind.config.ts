@@ -8,9 +8,10 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          black: "#0a0a0a",
-          yellow: "#eab308", 
-          red: "#dc2626"     
+          black: "#020617",   // Deep space blue-black
+          surface: "#0f172a", // Elevated card background
+          blue: "#3b82f6",    // Electric blue
+          neon: "#22c55e",    // Neon green indicator
         }
       }
     },
