@@ -1,15 +1,18 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AthleteRegistration() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({ fullName: "", email: "", sport: "" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(""); // Clear old errors
     
     try {
       const res = await fetch("/api/register", {
@@ -19,10 +22,15 @@ export default function AthleteRegistration() {
       });
       
       if (res.ok) {
-        router.push("/profile"); // Redirect to dashboard on success!
+        // 🚨 DROPPING THE REGISTERED COOKIE HERE 🚨
+        document.cookie = "lakspacio_auth=registered; path=/; max-age=31536000";
+        router.push("/profile"); 
+      } else {
+        const data = await res.json();
+        setError(data.error || "Failed to create profile.");
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      setError("Network error. Cannot reach backend API.");
     }
     setLoading(false);
   };
@@ -56,8 +64,14 @@ export default function AthleteRegistration() {
             className="w-full bg-white/5 px-5 py-3.5 outline-none text-white placeholder-slate-500 rounded-xl border border-white/5 hover:bg-white/10 focus:border-brand-blue transition-all text-sm"
           />
           
-          <button disabled={loading} type="submit" className="mt-4 bg-brand-blue text-white font-bold py-4 rounded-xl hover:bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all text-center text-sm disabled:opacity-50">
-            {loading ? "Creating Profile..." : "Create Profile"}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/30 p-3 rounded-xl mt-2">
+              <p className="text-red-400 text-xs text-center font-bold">{error}</p>
+            </div>
+          )}
+          
+          <button disabled={loading} type="submit" className="mt-4 bg-brand-blue text-white font-bold py-4 rounded-xl hover:bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all text-center text-sm disabled:opacity-50 flex items-center justify-center gap-2">
+            {loading ? "Processing..." : "Create Profile"}
           </button>
         </form>
       </div>
