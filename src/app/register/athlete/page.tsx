@@ -20,11 +20,14 @@ export default function AthleteRegistration() {
         body: JSON.stringify({ type: "athlete", ...formData }),
       });
       
-      if (res.ok) {
-        // 🚨 FIXED: Use localStorage so the homepage Gatekeeper can see it 🚨
+            if (res.ok) {
+        const data = await res.json();
         localStorage.setItem("lakspacio_auth", "registered");
+        localStorage.setItem("lakspacio_userId", data.user.id);
+        localStorage.setItem("lakspacio_role", "ATHLETE");
         router.push("/profile"); 
       } else {
+              
         const data = await res.json();
         setError(data.error || "Failed to create profile.");
       }
