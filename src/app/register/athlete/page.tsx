@@ -20,12 +20,14 @@ export default function AthleteRegistration() {
         body: JSON.stringify({ type: "athlete", ...formData }),
       });
       
-            if (res.ok) {
+                  if (res.ok) {
         const data = await res.json();
         localStorage.setItem("lakspacio_auth", "registered");
         localStorage.setItem("lakspacio_userId", data.user.id);
         localStorage.setItem("lakspacio_role", "ATHLETE");
-        router.push("/profile"); 
+        
+        // 🚨 FIXED: Hard reload forces the Navigation tabs to update!
+        window.location.href = "/profile"; 
       } else {
               
         const data = await res.json();
