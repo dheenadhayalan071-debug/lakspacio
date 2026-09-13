@@ -20,11 +20,14 @@ export default function FacilityRegistration() {
         body: JSON.stringify({ type: "facility", ...formData }),
       });
       
-      if (res.ok) {
-        // 🚨 FIXED: Now using localStorage to match the Homepage Gatekeeper 🚨
+            if (res.ok) {
+        const data = await res.json();
         localStorage.setItem("lakspacio_auth", "registered");
-        router.push("/facility"); 
+        localStorage.setItem("lakspacio_userId", data.user.id);
+        localStorage.setItem("lakspacio_role", "ATHLETE");
+        router.push("/profile"); 
       } else {
+              
         const data = await res.json();
         setError(data.error || "Failed to register facility.");
       }
