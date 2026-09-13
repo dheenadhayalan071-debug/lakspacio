@@ -21,8 +21,8 @@ export default function FacilityRegistration() {
       });
       
       if (res.ok) {
-        // 🚨 DROPPING THE REGISTERED COOKIE HERE 🚨
-        document.cookie = "lakspacio_auth=registered; path=/; max-age=31536000";
+        // 🚨 FIXED: Now using localStorage to match the Homepage Gatekeeper 🚨
+        localStorage.setItem("lakspacio_auth", "registered");
         router.push("/facility"); 
       } else {
         const data = await res.json();
