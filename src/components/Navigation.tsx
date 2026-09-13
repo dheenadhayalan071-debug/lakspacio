@@ -18,7 +18,7 @@ export default function Navigation() {
 
   return (
     <>
-      {/* 🚨 FIXED: Ultra-Clean Top Header (No more squished text) */}
+      {/* 🚨 Clean Top Header - No text links to glitch on mobile! */}
       <nav className="flex items-center justify-between p-4 md:p-6 border-b border-white/5 sticky top-0 bg-brand-black/80 backdrop-blur-xl z-50">
         <Link href="/" className="text-2xl font-black tracking-tighter hover:text-brand-blue transition-colors">
           LAKSPACIO.
@@ -37,7 +37,6 @@ export default function Navigation() {
 
       {/* Mobile Bottom App Navigation */}
       <div className="fixed bottom-0 left-0 w-full bg-brand-surface/95 backdrop-blur-xl border-t border-white/10 flex justify-between items-center px-6 py-3 z-50">
-        
         <Link href="/" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           <span className="text-[10px] font-medium mt-0.5">Home</span>
