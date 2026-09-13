@@ -20,12 +20,14 @@ export default function FacilityRegistration() {
         body: JSON.stringify({ type: "facility", ...formData }),
       });
       
-            if (res.ok) {
+                  if (res.ok) {
         const data = await res.json();
         localStorage.setItem("lakspacio_auth", "registered");
         localStorage.setItem("lakspacio_userId", data.user.id);
-        localStorage.setItem("lakspacio_role", "ATHLETE");
-        router.push("/profile"); 
+        localStorage.setItem("lakspacio_role", "FACILITY_OWNER");
+        
+        // 🚨 FIXED: Hard reload forces the Navigation tabs to update!
+        window.location.href = "/facility"; 
       } else {
               
         const data = await res.json();
