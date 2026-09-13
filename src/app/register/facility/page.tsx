@@ -5,11 +5,13 @@ import { useRouter } from "next/navigation";
 export default function FacilityRegistration() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({ fullName: "", email: "", facilityName: "", city: "Madurai" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
     
     try {
       const res = await fetch("/api/register", {
@@ -19,10 +21,15 @@ export default function FacilityRegistration() {
       });
       
       if (res.ok) {
-        router.push("/facility"); // Redirect to owner dashboard!
+        // 🚨 DROPPING THE REGISTERED COOKIE HERE 🚨
+        document.cookie = "lakspacio_auth=registered; path=/; max-age=31536000";
+        router.push("/facility"); 
+      } else {
+        const data = await res.json();
+        setError(data.error || "Failed to register facility.");
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      setError("Network error. Cannot reach backend API.");
     }
     setLoading(false);
   };
@@ -60,6 +67,12 @@ export default function FacilityRegistration() {
             onChange={(e) => setFormData({...formData, city: e.target.value})}
             className="w-full bg-white/5 px-5 py-3.5 outline-none text-white placeholder-slate-500 rounded-xl border border-white/5 hover:bg-white/10 focus:border-brand-neon transition-all text-sm"
           />
+          
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/30 p-3 rounded-xl mt-2">
+              <p className="text-red-400 text-xs text-center font-bold">{error}</p>
+            </div>
+          )}
           
           <button disabled={loading} type="submit" className="mt-4 bg-brand-neon text-black font-bold py-4 rounded-xl hover:bg-green-400 shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all text-center text-sm disabled:opacity-50">
             {loading ? "Creating..." : "Launch Facility Hub"}
