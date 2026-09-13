@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 export default function AthleteRegistration() {
   const router = useRouter();
@@ -22,8 +21,8 @@ export default function AthleteRegistration() {
       });
       
       if (res.ok) {
-        // 🚨 DROPPING THE REGISTERED COOKIE HERE 🚨
-        document.cookie = "lakspacio_auth=registered; path=/; max-age=31536000";
+        // 🚨 FIXED: Use localStorage so the homepage Gatekeeper can see it 🚨
+        localStorage.setItem("lakspacio_auth", "registered");
         router.push("/profile"); 
       } else {
         const data = await res.json();
