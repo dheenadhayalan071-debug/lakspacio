@@ -1,66 +1,72 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-export default function AthleteRegistration() {
+export default function Home() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ fullName: "", email: "", sport: "" });
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    
-    try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "athlete", ...formData }),
-      });
-      
-      if (res.ok) {
-        router.push("/profile"); // Redirect to dashboard on success!
-      }
-    } catch (error) {
-      console.error(error);
+  useEffect(() => {
+    // Check if the user is a registered user or a guest
+    const auth = localStorage.getItem("lakspacio_auth");
+    if (!auth) {
+      router.replace("/register");
+    } else {
+      setIsAuthorized(true);
     }
-    setLoading(false);
-  };
+  }, [router]);
+
+  // Show a sleek loading state while checking authorization
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-[calc(100vh-80px)] bg-brand-black flex items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-4 border-brand-blue border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center p-5 relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-brand-blue/20 blur-[100px] rounded-full pointer-events-none"></div>
+    <main className="px-5 pt-12 pb-32 flex flex-col items-center justify-center text-center relative overflow-hidden min-h-[calc(100vh-80px)]">
+      {/* Glowing Ambient Background Effect */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[400px] bg-brand-blue/20 blur-[100px] rounded-full pointer-events-none"></div>
 
-      <div className="w-full max-w-md bg-brand-surface/80 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl z-10 relative">
-        <div className="w-12 h-12 rounded-full bg-brand-blue/20 flex items-center justify-center mb-6 border border-brand-blue/30">
-          <span className="text-2xl">🏃</span>
-        </div>
-        
-        <h2 className="text-2xl font-black text-white mb-2">Athlete Details</h2>
-        <p className="text-sm text-slate-400 mb-8">Set up your profile to start booking spaces.</p>
-        
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input 
-            required type="text" placeholder="Full Name" 
-            onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-            className="w-full bg-white/5 px-5 py-3.5 outline-none text-white placeholder-slate-500 rounded-xl border border-white/5 hover:bg-white/10 focus:border-brand-blue transition-all text-sm"
-          />
-          <input 
-            required type="email" placeholder="Email Address" 
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
-            className="w-full bg-white/5 px-5 py-3.5 outline-none text-white placeholder-slate-500 rounded-xl border border-white/5 hover:bg-white/10 focus:border-brand-blue transition-all text-sm"
-          />
-          <input 
-            type="text" placeholder="Primary Sport (e.g., Basketball)" 
-            onChange={(e) => setFormData({...formData, sport: e.target.value})}
-            className="w-full bg-white/5 px-5 py-3.5 outline-none text-white placeholder-slate-500 rounded-xl border border-white/5 hover:bg-white/10 focus:border-brand-blue transition-all text-sm"
-          />
-          
-          <button disabled={loading} type="submit" className="mt-4 bg-brand-blue text-white font-bold py-4 rounded-xl hover:bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all text-center text-sm disabled:opacity-50">
-            {loading ? "Creating Profile..." : "Create Profile"}
-          </button>
-        </form>
+      {/* Live System Indicator Badge */}
+      <div className="relative inline-flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-[10px] md:text-xs font-semibold uppercase tracking-widest text-brand-neon">
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-neon opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-neon"></span>
+        </span>
+        Intelligence Layer Active
       </div>
-    </div>
+      
+      <h1 className="relative text-4xl md:text-7xl font-extrabold tracking-tight mb-4 leading-tight">
+        Find your space. <br/>
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-neon">
+          Play your game.
+        </span>
+      </h1>
+      
+      <p className="relative text-slate-400 text-sm md:text-lg mb-10 max-w-xl mx-auto">
+        The intelligent marketplace connecting athletes with underutilized sports facilities across the city. 
+      </p>
+
+      {/* Smooth Bento-Style Search Engine */}
+      <div className="relative w-full max-w-3xl bg-brand-surface/80 backdrop-blur-xl p-2.5 rounded-3xl border border-white/10 flex flex-col md:flex-row gap-2 shadow-2xl z-10">
+        <input 
+          type="text" 
+          placeholder="What sport?" 
+          className="w-full bg-white/5 px-5 py-3.5 outline-none text-white placeholder-slate-500 rounded-2xl hover:bg-white/10 focus:bg-white/10 transition-all text-sm"
+        />
+        <input 
+          type="text" 
+          placeholder="Location" 
+          className="w-full bg-white/5 px-5 py-3.5 outline-none text-white placeholder-slate-500 rounded-2xl hover:bg-white/10 focus:bg-white/10 transition-all text-sm"
+        />
+        <Link href="/search" className="bg-brand-blue text-white font-bold px-8 py-3.5 rounded-2xl hover:bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all w-full md:w-auto shrink-0 flex items-center justify-center text-sm">
+          Search
+        </Link>
+      </div>
+    </main>
   );
 }
