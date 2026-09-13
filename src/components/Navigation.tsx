@@ -8,26 +8,23 @@ export default function Navigation() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Read the role we just saved during registration
     const storedRole = localStorage.getItem("lakspacio_role") || "GUEST";
     setRole(storedRole);
   }, [pathname]);
 
-  // Hide navigation completely on the registration screens
   if (pathname.startsWith("/register")) return null;
 
   const isOwner = role === "FACILITY_OWNER";
 
   return (
     <>
-      {/* Global Top Navigation */}
       <nav className="flex items-center justify-between p-4 md:p-6 border-b border-white/5 sticky top-0 bg-brand-black/80 backdrop-blur-xl z-50">
         <Link href="/" className="text-2xl font-black tracking-tighter hover:text-brand-blue transition-colors">
           LAKSPACIO.
         </Link>
         
-        {/* Desktop Links */}
-        <div className="hidden md:flex gap-8 items-center">
+        {/* 🚨 FIXED: Changed from md:flex to lg:flex to protect mobile screens */}
+        <div className="hidden lg:flex gap-8 items-center">
           {!isOwner ? (
             <>
               <Link href="/search" className="text-sm font-semibold text-slate-400 hover:text-white transition-colors">Find Space</Link>
@@ -48,22 +45,18 @@ export default function Navigation() {
             Sign In
           </Link>
         ) : (
-          <Link href="/profile" className="hidden md:block text-sm font-bold bg-white/10 text-white px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors border border-white/10">
+          <Link href="/profile" className="hidden lg:block text-sm font-bold bg-white/10 text-white px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors border border-white/10">
             Profile
           </Link>
         )}
       </nav>
 
-      {/* Pro Mobile Bottom App Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 w-full bg-brand-surface/90 backdrop-blur-xl border-t border-white/10 flex justify-between items-center px-6 py-3 z-50">
-        
-        {/* Home (Always Visible) */}
         <Link href="/" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           <span className="text-[10px] font-medium mt-0.5">Home</span>
         </Link>
 
-        {/* Dynamic Middle Tabs */}
         {!isOwner ? (
           <>
             <Link href="/search" className="flex flex-col items-center gap-1 text-slate-400 hover:text-brand-blue transition-colors">
@@ -88,12 +81,10 @@ export default function Navigation() {
           </>
         )}
 
-        {/* AI & Profile (Always Visible) */}
         <Link href="/ai" className="flex flex-col items-center gap-1 text-slate-400 hover:text-brand-blue transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <span className="text-[10px] font-medium mt-0.5">AI Engine</span>
         </Link>
-
         <Link href="/profile" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="14" cy="7" r="4"/></svg>
           <span className="text-[10px] font-medium mt-0.5">Profile</span>
@@ -102,4 +93,3 @@ export default function Navigation() {
     </>
   );
 }
-
